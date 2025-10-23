@@ -1,6 +1,7 @@
 from pygame import *
 
 class GameSprite(sprite.Sprite):
+
     def __init__(self,player_image,player_x,player_y,player_speed):
         super().__init__()
         self.image = player_image
@@ -13,9 +14,10 @@ class GameSprite(sprite.Sprite):
         window.blit(self.image, (self.rect.x, self.rect.y))
 
 class Player(GameSprite):
+
     def __init__(self, player_image, x, y, speed):
         super().__init__(player_image,x,y,speed)
-        
+
     def update_l(self):
         keys = key.get_pressed()
         if keys[K_w] and self.rect.y > 5:
@@ -32,10 +34,24 @@ class Player(GameSprite):
             self.rect.y += self.player_speed        
         self.reset()
 
+class Ball(GameSprite):
+
+    def __init__(self, ball_image, x, y, speed):
+        super().__init__(ball_image,x,y,speed)
+        self.x_speed = speed
+        self.y_speed = speed
+
+    def update(self):
+        self.rect.x += self.x_speed
+        self.rect.y += self.y_speed
+        self.reset()
+
 player_image = transform.scale(image.load('rocket.png'),(30,120))
 player_left = Player(player_image, 20, 300, 4)
 player_right = Player(player_image, 660, 300, 4)
 
+ball_image = transform.scale(image.load('ball.png'),(50,50))
+ball = Ball(ball_image, 350, 250, 3)
 
 FPS = 60
 clock = time.Clock()
@@ -56,16 +72,10 @@ while game:
 
     player_left.update_l()
     player_right.update_r()
-
+    ball.update()
 
     clock.tick(FPS)
     display.update()
-
-
-
-
-
-
 
 
 
