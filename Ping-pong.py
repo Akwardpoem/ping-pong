@@ -55,14 +55,19 @@ player_right = Player(player_image, 660, 300, 4)
 ball_image = transform.scale(image.load('ball.png'),(50,50))
 ball = Ball(ball_image, 350, 250, 3)
 
+side = str()
 FPS = 60
 clock = time.Clock()
+font.init()
+font1 = font.Font(None, 38)
+
 
 window = display.set_mode((700,500))
 display.set_caption('Пинг-понг')
 background = transform.scale(image.load('background.png'),(700,500))
 
 game = True
+finish = False
 
 while game:
 
@@ -72,12 +77,25 @@ while game:
 
     window.blit(background,(0,0))
 
-    if sprite.collide_rect(ball, player_left) or sprite.collide_rect(ball, player_right):
-        ball.x_speed = -ball.x_speed
+    if not finish:
+        if sprite.collide_rect(ball, player_left) or sprite.collide_rect(ball, player_right):
+            ball.x_speed = -ball.x_speed
 
-    player_left.update_l()
-    player_right.update_r()
-    ball.update()
+        player_left.update_l()
+        player_right.update_r()
+        ball.update()
+
+        if ball.rect.x > 670:
+            side = 'Right'
+            finish = True
+        elif ball.rect.x < 0:
+            side = 'Left'
+            finish = True
+
+    else:
+        end_text = font1.render(f'{side} lose!', True, (255,0,0))
+        window.blit(end_text,(300,231))
+
 
     clock.tick(FPS)
     display.update()
