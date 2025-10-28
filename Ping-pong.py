@@ -42,6 +42,8 @@ class Ball(GameSprite):
         self.y_speed = speed
 
     def update(self):
+        if self.rect.y < 0 or self.rect.y > 450:
+            self.y_speed = -self.y_speed
         self.rect.x += self.x_speed
         self.rect.y += self.y_speed
         self.reset()
@@ -69,6 +71,9 @@ while game:
             game = False
 
     window.blit(background,(0,0))
+
+    if sprite.collide_rect(ball, player_left) or sprite.collide_rect(ball, player_right):
+        ball.x_speed = -ball.x_speed
 
     player_left.update_l()
     player_right.update_r()
